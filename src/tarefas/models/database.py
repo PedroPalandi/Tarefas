@@ -1,7 +1,6 @@
 from os import getenv
 from pathlib import Path
 
-
 import mysql.connector as mc
 from dotenv import load_dotenv
 from mysql.connector import Error
