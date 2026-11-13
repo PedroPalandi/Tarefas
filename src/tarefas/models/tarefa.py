@@ -1,3 +1,4 @@
+
 from datetime import datetime
 
 from tarefas.models.database import Database
@@ -46,6 +47,42 @@ class Tarefa:
         params = (id_tarefa,)
         with Database() as db:
             db.executar(sql, params)
+
+
+    @staticmethod
+    def atualizarTarefa(id_tarefa, titulo_tarefa, data_conclusao):
+
+        sql = """UPDATE tarefa SET titulo_tarefa = %s, data_conclusao = %s
+        WHERE id_tarefa = %s;"""
+        params = (titulo_tarefa, data_conclusao, id_tarefa)
+        with Database() as db:
+            db.executar(sql, params) 
+
+    
+    @staticmethod
+    def buscarTarefa(id_tarefa):
+        
+        sql='''SELECT id_tarefa, titulo_tarefa, data_conclusao 
+        FROM tarefa WHERE id_tarefa = %s'''
+        params=(id_tarefa,)
+
+        with Database() as db:
+            tarefa_banco = db.executar(sql, params)
+
+        # Instancia um novo objeto com os dados recuperados do banco
+        if tarefa_banco:
+            dados = tarefa_banco[0]
+
+            return Tarefa(
+                titulo=dados['titulo_tarefa'],
+                id=dados['id_tarefa'],
+                data_conclusao=dados['data_conclusao']
+            )
+
+        return None
+
+
+
 
 # Área 51 (testes)
 #tarefa = Tarefa('Minha nova tarefa')

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -10,9 +11,26 @@
     <h1>Digite a tarefa e a data de conclusão (opcional):</h1>
 
     <form method="POST"> <!-- seleciona o método HTTP -->
-        <input type="text" id="tituloTarefa" name="tituloTarefa">
-        <input type="date" id="dataConclusao" name="dataConclusao">
-        <button type="submit">Adicionar</button>
+        <input
+            type="text"
+            id="tituloTarefa"
+            name="tituloTarefa"
+            value="{{ tarefa.titulo if tarefa else '' }}"
+        >
+
+        <input
+            type="date"
+            id="dataConclusao"
+            name="dataConclusao"
+            value="{{ tarefa.data_conclusao if tarefa and tarefa.data_conclusao else '' }}"
+        >
+
+        <!-- Verifica se está adicionando ou atualizando uma tarefa -->
+        {% if tarefa %}
+            <button type="submit">Atualizar</button>
+        {% else %}
+            <button type="submit">Adicionar</button>
+        {% endif %}
     </form>
     <!-- <output id="listaTarefas">Nenhuma tarefa cadastrada</output> -->
     
@@ -21,6 +39,7 @@
             <li>
                 {{ tarefa.titulo_tarefa }} - {{ tarefa.data_conclusao }}
                 <a href="{{ url_for('apagar_id_especificado', id=tarefa.id_tarefa) }}">Apagar</a> <!-- Link para a rota de apagar este ID -->
+                <a href="{{url_for('atualizar_tarefa', id_tarefa=tarefa.id_tarefa)}}">Atualizar</a>
             </li>
         {% endfor %}
     </ul>
